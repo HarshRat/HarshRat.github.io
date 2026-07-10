@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harsh Rathore — Technical Architect</title>
+<meta name="description" content="Harsh Rathore — Technical Architect at Metafic. JavaScript and GenAI engineer building web and mobile products with React, React Native and Node.js. Based in Bengaluru, India.">
+<meta name="author" content="Harsh Rathore">
+<link rel="canonical" href="https://harshrathore.me/">
+<meta property="og:title" content="Harsh Rathore — Technical Architect">
+<meta property="og:description" content="JavaScript engineer building web and mobile products. Technical Architect at Metafic.">
+<meta property="og:url" content="https://harshrathore.me/">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%230d1117'/%3E%3Ctext x='18' y='68' font-family='monospace' font-size='52' fill='%2339d353'%3E%26gt;_%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e14;
+  --terminal: #0d1117;
+  --border: #21262d;
+  --text: #c9d1d9;
+  --dim: #8b949e;
+  --green: #39d353;
+  --cyan: #58a6ff;
+  --yellow: #e3b341;
+  --magenta: #bc8cff;
+  --red: #ff7b72;
+  --selection: rgba(57, 211, 83, .25);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+::selection { background: var(--selection); }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 15px;
+  line-height: 1.65;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 24px 12px 48px;
+  background-image: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(57, 211, 83, .07), transparent);
+}
+.terminal {
+  width: 100%;
+  max-width: 860px;
+  background: var(--terminal);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 16px 60px rgba(0, 0, 0, .55);
+  overflow: hidden;
+  height: fit-content;
+}
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #161b22;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot.r { background: #ff5f57; } .dot.y { background: #febc2e; } .dot.g { background: #28c840; }
+.titlebar .title {
+  flex: 1;
+  text-align: center;
+  color: var(--dim);
+  font-size: 13px;
+  user-select: none;
+}
+.screen { padding: 24px 22px 28px; }
+.block { margin-bottom: 26px; }
+.prompt { color: var(--dim); white-space: nowrap; }
+.prompt .u { color: var(--green); font-weight: 500; }
+.prompt .p { color: var(--cyan); }
+.cmdline { display: flex; flex-wrap: wrap; gap: 0 10px; }
+.cmd { color: var(--text); font-weight: 500; word-break: break-all; }
+.out { margin-top: 10px; }
+.comment { color: var(--dim); font-style: italic; }
+h1 {
+  font-size: clamp(26px, 5vw, 40px);
+  color: var(--green);
+  font-weight: 700;
+  letter-spacing: -.5px;
+  line-height: 1.2;
+}
+.tagline { color: var(--dim); margin-top: 4px; }
+.tagline b { color: var(--yellow); font-weight: 500; }
+a { color: var(--cyan); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.links { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; }
+.links a::before { content: "↗ "; color: var(--dim); }
+.kv { display: grid; grid-template-columns: 130px 1fr; gap: 2px 16px; }
+.kv .k { color: var(--magenta); }
+@media (max-width: 560px) { .kv { grid-template-columns: 1fr; } .kv .k { margin-top: 8px; } }
+.job { display: grid; grid-template-columns: 190px 1fr; gap: 0 18px; padding: 7px 0; border-left: 2px solid var(--border); padding-left: 16px; margin-left: 2px; }
+.job:first-child { border-color: var(--green); }
+.job .dates { color: var(--dim); font-size: 13.5px; padding-top: 2px; }
+.job .role { color: var(--text); font-weight: 500; }
+.job .note { color: var(--dim); font-size: 13.5px; }
+@media (max-width: 560px) { .job { grid-template-columns: 1fr; } }
+.org { color: var(--yellow); margin-bottom: 10px; }
+.projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 12px; }
+.card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  background: rgba(255, 255, 255, .015);
+  transition: border-color .2s, transform .2s;
+  display: block;
+  color: var(--text);
+}
+.card:hover { border-color: var(--green); transform: translateY(-2px); text-decoration: none; }
+.card .name { color: var(--green); font-weight: 700; }
+.card .name::before { content: "▸ "; color: var(--dim); }
+.card .role { color: var(--magenta); font-size: 13px; margin: 2px 0 8px; }
+.card .desc { color: var(--dim); font-size: 13.5px; line-height: 1.55; }
+.card .url { color: var(--cyan); font-size: 12.5px; margin-top: 10px; word-break: break-all; }
+.cursor {
+  display: inline-block;
+  width: 9px;
+  height: 1.15em;
+  background: var(--green);
+  vertical-align: text-bottom;
+  animation: blink 1.1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+#cli { display: flex; flex-wrap: wrap; gap: 0 10px; align-items: baseline; }
+#cli-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font: inherit;
+  flex: 1;
+  min-width: 120px;
+  caret-color: var(--green);
+}
+#cli-out { margin-top: 10px; }
+#cli-out .err { color: var(--red); }
+.hint { color: var(--dim); font-size: 13px; margin-bottom: 8px; }
+.hint code { color: var(--yellow); }
+footer { color: var(--dim); font-size: 12.5px; text-align: center; margin-top: 26px; }
+.maps { display: grid; grid-template-columns: 3fr 2fr; gap: 18px; align-items: end; margin-top: 12px; }
+@media (max-width: 620px) { .maps { grid-template-columns: 1fr; } }
+.maps img { width: 100%; height: auto; display: block; }
+.maps figcaption { color: var(--dim); font-size: 12.5px; margin-top: 6px; }
+.travel-log { margin-top: 18px; }
+.travel-log div { padding: 2px 0; }
+.travel-log .d { color: var(--magenta); }
+.travel-log .hl { color: var(--yellow); }
+.photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+@media (max-width: 620px) { .photo-grid { grid-template-columns: repeat(2, 1fr); } }
+.ph { padding: 0; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: none; cursor: pointer; transition: border-color .2s, transform .2s; }
+.ph:hover { border-color: var(--green); transform: translateY(-2px); }
+.ph img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+#lightbox { position: fixed; inset: 0; background: rgba(4, 6, 10, .92); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; z-index: 50; padding: 24px; cursor: zoom-out; }
+#lightbox[hidden] { display: none; }
+#lightbox img { max-width: 92vw; max-height: 80vh; border-radius: 8px; border: 1px solid var(--border); }
+#lightbox .cap { color: var(--dim); font-size: 13.5px; text-align: center; }
+#lightbox .cap::before { content: "# "; }
+.typing-hidden { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .cursor { animation: none; }
+}
+</style>
+</head>
+<body>
+<main class="terminal" aria-label="Terminal-style portfolio of Harsh Rathore">
+  <div class="titlebar" aria-hidden="true">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span class="title">harsh@rathore: ~</span>
+  </div>
+  <div class="screen" id="screen">
+
+    <section class="block" data-cmd="whoami">
+      <div class="cmdline"><span class="prompt"><span class="u">harsh@rathore</span>:<span class="p">~</span>$</span> <span class="cmd">whoami</span></div>
+      <div class="out">
+        <h1>Harsh Rathore</h1>
+        <p class="tagline">Technical Architect <b>@ Metafic</b> · Bengaluru, India</p>
+        <div class="links">
+          <a href="https://github.com/HarshRat" target="_blank" rel="noopener">github</a>
+          <a href="https://in.linkedin.com/in/harshrat" target="_blank" rel="noopener">linkedin</a>
+          <a href="mailto:mail@harshrathore.me" id="email-link">email</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="about" data-cmd="cat about.txt">
+      <div class="cmdline"><span class="prompt"><span class="u">harsh@rathore</span>:<span class="p">~</span>$</span> <span class="cmd">cat about.txt</span></div>
+      <div class="out">
+        <p>Technical Architect at Metafic and an avid developer. I love coding in
+        JavaScript — designing and shipping web &amp; mobile products end-to-end with
+        <span style="color:var(--cyan)">React</span>, <span style="color:var(--cyan)">React Native</span> and
+        <span style="color:var(--cyan)">Node.js</span>, with a strong interest in backend engineering
+        and system design. Also a <span style="color:var(--cyan)">GenAI</span> dev and avid AI user —
+        building LLM-powered features into products and AI into my everyday workflow.</p>
+        <div class="kv" style="margin-top:14px">
+          <span class="k">current_role</span><span>Technical Architect @ Metafic</span>
+          <span class="k">location</span><span>Bengaluru, India</span>
+          <span class="k">stack</span><span>JavaScript · TypeScript · React · React Native · Node.js</span>
+          <span class="k">interests</span><span>Architecture · GenAI · Mobile · Backend · Developer experience</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="experience" data-cmd="history --work">
+      <div class="cmdline"><span class="prompt"><span class="u">harsh@rathore</span>:<span class="p">~</span>$</span> <span class="cmd">history --work</span></div>
+      <div class="out">
+        <p class="org">Metafic · Jan 2021 → Present</p>
+        <div class="job">
+          <span class="dates">Nov 2025 — Present</span>
+          <span><span class="role">Technical Architect</span><br>
+          <span class="note">Owning technical direction and architecture across client products.</span></span>
+        </div>
+        <div class="job">
+          <span class="dates">Apr 2024 — Nov 2025</span>
+          <span><span class="role">Engineering Lead</span><br>
+          <span class="note">Led engineering teams delivering web and mobile applications.</span></span>
+        </div>
+        <div class="job">
+          <span class="dates">Apr 2023 — Apr 2024</span>
+          <span><span class="role">Mobile Development Lead</span><br>
+          <span class="note">Led React Native development and mobile release processes.</span></span>
+        </div>
+        <div class="job">
+          <span class="dates">Jun 2021 — Apr 2023</span>
+          <span><span class="role">React Native Developer</span><br>
+          <span class="note">Built and shipped cross-platform mobile apps.</span></span>
+        </div>
+        <div class="job">
+          <span class="dates">Jan 2021 — Jun 2021</span>
+          <span><span class="role">React Native Intern</span><br>
+          <span class="note">Started out building mobile UI and learning the craft.</span></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="projects" data-cmd="ls ~/projects">
+      <div class="cmdline"><span class="prompt"><span class="u">harsh@rathore</span>:<span class="p">~</span>$</span> <span class="cmd">ls ~/projects</span></div>
+      <div class="out">
+        <div class="projects">
+          <a class="card" href="https://dallal.com.kw/" target="_blank" rel="noopener">
+            <div class="name">dallal</div>
+            <div class="role">Technical Architect</div>
+            <div class="desc">Real estate buying &amp; selling platform for the Kuwaiti market — led the technical architecture across the product.</div>
+            <div class="url">dallal.com.kw</div>
+          </a>
+          <a class="card" href="https://artrivi.com/" target="_blank" rel="noopener">
+            <div class="name">artrivi</div>
+            <div class="role">Creator · at Metafic</div>
+            <div class="desc">AI-assisted research paper writing platform — created end-to-end at Metafic.</div>
+            <div class="url">artrivi.com</div>
+          </a>
+          <div class="card">
+            <div class="name">ai-wealth-platform</div>
+            <div class="role">Frontend Engineer</div>
+            <div class="desc">AI-driven wealth management platform for a fintech client — built the frontend experience.</div>
+            <div class="url">private client project</div>
+          </div>
+          <a class="card" href="https://capricslearninglab.com/" target="_blank" rel="noopener">
+            <div class="name">caprics-learning-lab</div>
+            <div class="role">Tech Lead</div>
+            <div class="desc">Online learning platform — led the engineering team building it.</div>
+            <div class="url">capricslearninglab.com</div>
+          </a>
+          <a class="card" href="https://apps.apple.com/us/app/snapback-returns/id6479014048" target="_blank" rel="noopener">
+            <div class="name">snapback-returns</div>
+            <div class="role">Fullstack Engineer</div>
+            <div class="desc">iOS app that makes product returns painless — built across the stack, live on the App Store.</div>
+            <div class="url">apps.apple.com › snapback-returns</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="travel" data-cmd="travel --map">
+      <div class="cmdline"><span class="prompt"><span class="u">harsh@rathore</span>:<span class="p">~</span>$</span> <span class="cmd">travel --map</span></div>
+      <div class="out">
+        <div class="maps">
+          <figure>
+            <img src="assets/map-asia.svg" alt="Dot map of South and Southeast Asia with visited countries highlighted: India, Singapore, Malaysia, Thailand, Indonesia and Vietnam" loading="lazy">
+            <figcaption># countries — lit dots are stamped passports</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/map-india.svg" alt="Dot map of India with 15 visited states highlighted" loading="lazy">
+            <figcaption># india — 15 states &amp; counting</figcaption>
+          </figure>
+        </div>
+        <div class="kv" style="margin-top:18px">
+          <span class="k">countries</span><span>6 · India (home) · Singapore ×2 · Malaysia ×2 · Thailand · Indonesia · Vietnam</span>
+          <span class="k">indian_states</span><span>15 of 28 — and counting</span>
+          <span class="k">latest_trek</span><span>Beas Kund, Himachal · 12,772 ft</span>
+          <span class="k">volcanoes</span><span>Mt. Ijen (sulphur crater at dawn) · Mt. Bromo</span>
+        </div>
+        <div class="travel-log">
+          <div><span class="d">[2025-08]</span> Vietnam</div>
+          <div><span class="d">[2024-10]</span> Indonesia — <span class="hl">Mt. Ijen trek</span> · Mt. Bromo · Bali · Malaysia round two</div>
+          <div><span class="d">[2024-01]</span> Singapore round two</div>
+          <div><span class="d">[2023-10]</span> Thailand</div>
+          <div><span class="d">[2023-06]</span> Singapore &amp; Malaysia — first stamps on the passport</div>
+          <div><span class="d">[ongoing]</span> India — 15 states · latest: <span class="hl">Beas Kund trek</span> · day hikes around Karnataka</div>
+        </div>
+        <p class="hint" style="margin-top:20px">$ ls ~/travel/photos <span style="color:var(--dim)">— click to view</span></p>
+        <div class="photo-grid">
+          <button class="ph" data-cap="mt. ijen crater lake, indonesia — the 2 am start was worth it"><img src="assets/travel/ijen-crater.jpg" alt="Standing at the rim of Mt. Ijen's turquoise crater lake, Indonesia" loading="lazy"></button>
+          <button class="ph" data-cap="sulphur-proof at sunrise — mt. ijen, indonesia"><img src="assets/travel/ijen-sunrise.jpg" alt="Wearing a respirator mask at sunrise on Mt. Ijen" loading="lazy"></button>
+          <button class="ph" data-cap="camp at beas kund, himachal — 12,772 ft"><img src="assets/travel/beas-kund-camp.jpg" alt="Campsite with a yellow tent below snow-covered peaks at Beas Kund, Himachal" loading="lazy"></button>
+          <button class="ph" data-cap="the scramble up to beas kund"><img src="assets/travel/beas-kund-trail.jpg" alt="Trekkers crossing a boulder field on the Beas Kund trail" loading="lazy"></button>
+          <button class="ph" data-cap="winter light in kasol, himachal"><img src="assets/travel/himachal-winter.jpg" alt="Sunset lighting a snow peak behind a traditional Himachali house in Kasol" loading="lazy"></button>
+          <button class="ph" data-cap="chai is good with a view — goa"><img src="assets/travel/coast-chai.jpg" alt="Two cups of chai against a coastal sunset with palm trees in Goa" loading="lazy"></button>
+          <button class="ph" data-cap="green tunnel walk — singapore"><img src="assets/travel/jungle-walk.jpg" alt="Walking a wooden boardwalk through dense rainforest in Singapore" loading="lazy"></button>
+          <button class="ph" data-cap="best trail buddy"><img src="assets/travel/trail-buddy.jpg" alt="Harsh with a black Labrador on a lakeside trail" loading="lazy"></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="contact" data-cmd="contact --list">
+      <div class="cmdline"><span class="prompt"><span class="u">harsh@rathore</span>:<span class="p">~</span>$</span> <span class="cmd">contact --list</span></div>
+      <div class="out">
+        <div class="kv">
+          <span class="k">email</span><span><a href="mailto:mail@harshrathore.me">mail@harshrathore.me</a></span>
+          <span class="k">github</span><span><a href="https://github.com/HarshRat" target="_blank" rel="noopener">github.com/HarshRat</a></span>
+          <span class="k">linkedin</span><span><a href="https://in.linkedin.com/in/harshrat" target="_blank" rel="noopener">linkedin.com/in/harshrat</a></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="cli-block">
+      <p class="hint"># this terminal is real — try <code>help</code></p>
+      <div id="cli">
+        <span class="prompt"><span class="u">harsh@rathore</span>:<span class="p">~</span>$</span>
+        <input id="cli-input" type="text" autocomplete="off" spellcheck="false" aria-label="Type a command, e.g. help">
+      </div>
+      <div id="cli-out" role="log" aria-live="polite"></div>
+    </section>
+
+    <footer>© <span id="year">2026</span> Harsh Rathore · harshrathore.me · hosted on GitHub Pages</footer>
+  </div>
+</main>
+
+<div id="lightbox" hidden>
+  <img alt="">
+  <p class="cap"></p>
+</div>
+
+<script>
+(function () {
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  /* --- boot animation: type each command, then reveal its output --- */
+  var blocks = Array.prototype.slice.call(document.querySelectorAll(".block[data-cmd]"));
+  if (!reduced && !location.hash) {
+    blocks.forEach(function (b) {
+      b.querySelector(".cmd").textContent = "";
+      b.querySelector(".out").style.visibility = "hidden";
+      b.style.display = "none";
+    });
+    document.getElementById("cli-block").style.display = "none";
+    document.querySelector("footer").style.display = "none";
+
+    var i = 0;
+    function typeBlock() {
+      if (i >= blocks.length) {
+        document.getElementById("cli-block").style.display = "";
+        document.querySelector("footer").style.display = "";
+        return;
+      }
+      var b = blocks[i++];
+      b.style.display = "";
+      var cmdEl = b.querySelector(".cmd");
+      var full = b.getAttribute("data-cmd");
+      var caret = document.createElement("span");
+      caret.className = "cursor";
+      cmdEl.after(caret);
+      var j = 0;
+      (function typeChar() {
+        if (j < full.length) {
+          cmdEl.textContent += full.charAt(j++);
+          setTimeout(typeChar, 12 + Math.random() * 22);
+        } else {
+          setTimeout(function () {
+            caret.remove();
+            b.querySelector(".out").style.visibility = "";
+            setTimeout(typeBlock, 90);
+          }, 120);
+        }
+      })();
+    }
+    setTimeout(typeBlock, 250);
+  }
+
+  /* --- interactive prompt --- */
+  var input = document.getElementById("cli-input");
+  var out = document.getElementById("cli-out");
+  var HELP = [
+    ["help", "show this list"],
+    ["about", "who am I"],
+    ["work", "work experience"],
+    ["projects", "things I've built"],
+    ["travel", "where I've been"],
+    ["contact", "get in touch"],
+    ["sudo hire-me", "you know you want to"],
+    ["clear", "clear this output"]
+  ];
+  function print(html, cls) {
+    var d = document.createElement("div");
+    if (cls) d.className = cls;
+    d.innerHTML = html;
+    out.appendChild(d);
+    d.scrollIntoView({ block: "nearest", behavior: reduced ? "auto" : "smooth" });
+  }
+  function goto(id) {
+    document.getElementById(id).scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+  }
+  var commands = {
+    help: function () {
+      print(HELP.map(function (h) {
+        return '<span style="color:var(--yellow)">' + h[0] + "</span>" +
+          '<span style="color:var(--dim)"> — ' + h[1] + "</span>";
+      }).join("<br>"));
+    },
+    about: function () { goto("about"); print("scrolling to about…", "comment"); },
+    work: function () { goto("experience"); print("scrolling to experience…", "comment"); },
+    experience: function () { commands.work(); },
+    history: function () { commands.work(); },
+    projects: function () { goto("projects"); print("scrolling to projects…", "comment"); },
+    ls: function () { commands.projects(); },
+    travel: function () { goto("travel"); print("scrolling to travel…", "comment"); },
+    contact: function () { goto("contact"); print("scrolling to contact…", "comment"); },
+    email: function () { location.href = "mailto:mail@harshrathore.me"; },
+    whoami: function () { print("Harsh Rathore — Technical Architect @ Metafic"); },
+    pwd: function () { print("/home/harsh"); },
+    date: function () { print(new Date().toString()); },
+    echo: function (args) { print(args.join(" ") || ""); },
+    clear: function () { out.innerHTML = ""; },
+    exit: function () { print("nice try. there's no escape from good software.", "comment"); },
+    vim: function () { print("you're already trapped in one terminal. careful.", "comment"); },
+    rm: function () { print("rm: permission denied — this portfolio is load-bearing", "err"); },
+    sudo: function (args) {
+      if (args.join(" ").indexOf("hire-me") > -1 || args.join(" ").indexOf("hire me") > -1) {
+        print("[sudo] password accepted. opening mail client…");
+        setTimeout(function () { location.href = "mailto:mail@harshrathore.me?subject=Let's%20work%20together"; }, 600);
+      } else {
+        print("harsh is not in the sudoers file. this incident will be reported.", "err");
+      }
+    }
+  };
+  input.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter") return;
+    var raw = input.value.trim();
+    input.value = "";
+    if (!raw) return;
+    print('<span style="color:var(--dim)">$</span> ' + raw.replace(/</g, "&lt;"));
+    var parts = raw.split(/\s+/);
+    var fn = commands[parts[0].toLowerCase()];
+    if (fn) fn(parts.slice(1));
+    else print(parts[0].replace(/</g, "&lt;") + ": command not found — try <span style='color:var(--yellow)'>help</span>", "err");
+  });
+  document.getElementById("cli-block").addEventListener("click", function () { input.focus(); });
+
+  /* --- photo lightbox --- */
+  var lb = document.getElementById("lightbox");
+  var lbImg = lb.querySelector("img");
+  var lbCap = lb.querySelector(".cap");
+  Array.prototype.forEach.call(document.querySelectorAll(".ph"), function (btn) {
+    btn.addEventListener("click", function () {
+      var img = btn.querySelector("img");
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lbCap.textContent = btn.getAttribute("data-cap");
+      lb.hidden = false;
+    });
+  });
+  lb.addEventListener("click", function () { lb.hidden = true; lbImg.src = ""; });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !lb.hidden) { lb.hidden = true; lbImg.src = ""; }
+  });
+})();
+</script>
+</body>
+</html>
