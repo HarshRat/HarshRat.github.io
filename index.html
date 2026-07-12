@@ -147,6 +147,27 @@ a:hover { text-decoration: underline; }
 .hint { color: var(--dim); font-size: 13px; margin-bottom: 8px; }
 .hint code { color: var(--yellow); }
 footer { color: var(--dim); font-size: 12.5px; text-align: center; margin-top: 26px; }
+.np { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.eq { display: none; align-items: flex-end; gap: 2px; height: 14px; }
+.eq i { width: 3px; background: var(--green); height: 4px; }
+.np.playing .eq { display: inline-flex; }
+.np.playing .eq i { animation: eq 1s ease-in-out infinite; }
+.np.playing .eq i:nth-child(2) { animation-delay: .2s; }
+.np.playing .eq i:nth-child(3) { animation-delay: .4s; }
+@keyframes eq { 0%, 100% { height: 4px; } 50% { height: 14px; } }
+@media (prefers-reduced-motion: reduce) { .np.playing .eq i { animation: none; height: 9px; } }
+.mtoggle { display: flex; gap: 12px; margin: 14px 0 4px; }
+.mbtn { background: none; border: none; font: inherit; font-size: 13.5px; color: var(--dim); cursor: pointer; padding: 0; border-bottom: 1px dashed var(--border); }
+.mbtn.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+.mcols { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 28px; }
+@media (max-width: 620px) { .mcols { grid-template-columns: 1fr; } }
+.mrow { display: grid; grid-template-columns: 18px 1fr; gap: 8px; padding: 3px 0; align-items: baseline; }
+.mrow .n { color: var(--dim); font-size: 12.5px; }
+.mrow a { color: var(--text); }
+.mrow a:hover { color: var(--green); text-decoration: none; }
+.mrow .sub { color: var(--dim); font-size: 12.5px; }
+.mbar { height: 6px; background: rgba(255, 255, 255, .05); border-radius: 3px; margin-top: 4px; overflow: hidden; }
+.mbar i { display: block; height: 100%; background: linear-gradient(90deg, #1a7f37, var(--green)); border-radius: 3px; }
 .maps { display: grid; grid-template-columns: 3fr 2fr; gap: 18px; align-items: end; margin-top: 12px; }
 @media (max-width: 620px) { .maps { grid-template-columns: 1fr; } }
 .maps img { width: 100%; height: auto; display: block; }
@@ -322,6 +343,33 @@ footer { color: var(--dim); font-size: 12.5px; text-align: center; margin-top: 2
       </div>
     </section>
 
+    <section class="block" id="music" data-cmd="spotify --status">
+      <div class="cmdline"><span class="prompt"><span class="u">harsh@rathore</span>:<span class="p">~</span>$</span> <span class="cmd">spotify --status</span></div>
+      <div class="out">
+        <p class="np" id="np">
+          <span style="color:var(--green)">♪</span>
+          <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span id="np-text" class="comment">connecting to spotify…</span>
+        </p>
+        <div id="music-body" hidden>
+          <div class="mtoggle" role="tablist" aria-label="Time window">
+            <button class="mbtn active" data-win="4w">--last-4-weeks</button>
+            <button class="mbtn" data-win="6m">--last-6-months</button>
+          </div>
+          <div class="mcols">
+            <div>
+              <p class="org" style="margin-top:12px"># top artists</p>
+              <div id="m-artists"></div>
+            </div>
+            <div>
+              <p class="org" style="margin-top:12px"># top tracks</p>
+              <div id="m-tracks"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="block" id="contact" data-cmd="contact --list">
       <div class="cmdline"><span class="prompt"><span class="u">harsh@rathore</span>:<span class="p">~</span>$</span> <span class="cmd">contact --list</span></div>
       <div class="out">
@@ -407,6 +455,7 @@ footer { color: var(--dim); font-size: 12.5px; text-align: center; margin-top: 2
     ["work", "work experience"],
     ["projects", "things I've built"],
     ["travel", "where I've been"],
+    ["music", "what I'm listening to"],
     ["contact", "get in touch"],
     ["sudo hire-me", "you know you want to"],
     ["clear", "clear this output"]
@@ -435,6 +484,8 @@ footer { color: var(--dim); font-size: 12.5px; text-align: center; margin-top: 2
     projects: function () { goto("projects"); print("scrolling to projects…", "comment"); },
     ls: function () { commands.projects(); },
     travel: function () { goto("travel"); print("scrolling to travel…", "comment"); },
+    music: function () { goto("music"); print("scrolling to music…", "comment"); },
+    spotify: function () { commands.music(); },
     contact: function () { goto("contact"); print("scrolling to contact…", "comment"); },
     email: function () { location.href = "mailto:mail@harshrathore.me"; },
     whoami: function () { print("Harsh Rathore — Technical Architect @ Metafic"); },
@@ -466,6 +517,112 @@ footer { color: var(--dim); font-size: 12.5px; text-align: center; margin-top: 2
     else print(parts[0].replace(/</g, "&lt;") + ": command not found — try <span style='color:var(--yellow)'>help</span>", "err");
   });
   document.getElementById("cli-block").addEventListener("click", function () { input.focus(); });
+
+  /* --- spotify --- */
+  var MUSIC_API = "https://harshrathore-music.harsh-15c.workers.dev";
+  var npEl = document.getElementById("np");
+  var npText = document.getElementById("np-text");
+
+  function relTime(iso) {
+    var mins = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+    if (mins < 2) return "just now";
+    if (mins < 60) return mins + "m ago";
+    if (mins < 48 * 60) return Math.round(mins / 60) + "h ago";
+    return Math.round(mins / 1440) + "d ago";
+  }
+
+  function renderNow(d) {
+    npText.textContent = "";
+    npText.classList.remove("comment");
+    var label = document.createElement("span");
+    label.style.color = "var(--dim)";
+    label.textContent = d.playing ? "now playing: " : "last played: ";
+    var link = document.createElement("a");
+    link.href = d.track.url || "#";
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.textContent = d.track.name + " — " + d.track.artists;
+    npText.appendChild(label);
+    npText.appendChild(link);
+    if (!d.playing && d.playedAt) {
+      var t = document.createElement("span");
+      t.style.color = "var(--dim)";
+      t.textContent = " · " + relTime(d.playedAt);
+      npText.appendChild(t);
+    }
+    npEl.classList.toggle("playing", !!d.playing);
+  }
+
+  function fetchNow() {
+    if (document.hidden) return;
+    fetch(MUSIC_API + "/now").then(function (r) { return r.json(); }).then(function (d) {
+      if (d && d.track) renderNow(d);
+    }).catch(function () {});
+  }
+
+  var topData = null;
+  var curWin = "4w";
+  var BAR_W = [100, 78, 61, 48, 38];
+
+  function renderTop() {
+    if (!topData) return;
+    var artists = document.getElementById("m-artists");
+    var tracks = document.getElementById("m-tracks");
+    artists.textContent = "";
+    tracks.textContent = "";
+    (topData.artists[curWin] || []).forEach(function (a, i) {
+      var row = document.createElement("div");
+      row.className = "mrow";
+      var n = document.createElement("span"); n.className = "n"; n.textContent = String(i + 1).padStart(2, "0");
+      var body = document.createElement("span");
+      var link = document.createElement("a");
+      link.href = a.url; link.target = "_blank"; link.rel = "noopener"; link.textContent = a.name;
+      var bar = document.createElement("div"); bar.className = "mbar";
+      var fill = document.createElement("i"); fill.style.width = BAR_W[i] + "%";
+      bar.appendChild(fill);
+      body.appendChild(link); body.appendChild(bar);
+      row.appendChild(n); row.appendChild(body);
+      artists.appendChild(row);
+    });
+    (topData.tracks[curWin] || []).forEach(function (t, i) {
+      var row = document.createElement("div");
+      row.className = "mrow";
+      var n = document.createElement("span"); n.className = "n"; n.textContent = String(i + 1).padStart(2, "0");
+      var body = document.createElement("span");
+      var link = document.createElement("a");
+      link.href = t.url; link.target = "_blank"; link.rel = "noopener"; link.textContent = t.name;
+      var sub = document.createElement("span"); sub.className = "sub"; sub.textContent = " — " + t.artists;
+      body.appendChild(link); body.appendChild(sub);
+      row.appendChild(n); row.appendChild(body);
+      tracks.appendChild(row);
+    });
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll(".mbtn"), function (btn) {
+    btn.addEventListener("click", function () {
+      curWin = btn.getAttribute("data-win");
+      Array.prototype.forEach.call(document.querySelectorAll(".mbtn"), function (b) {
+        b.classList.toggle("active", b === btn);
+      });
+      renderTop();
+    });
+  });
+
+  fetch(MUSIC_API + "/top").then(function (r) { return r.json(); }).then(function (d) {
+    if (d && d.artists) {
+      topData = d;
+      document.getElementById("music-body").hidden = false;
+      renderTop();
+    }
+  }).catch(function () {});
+  fetchNow();
+  setInterval(fetchNow, 45000);
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) fetchNow(); });
+  setTimeout(function () {
+    if (npText.textContent === "connecting to spotify…") {
+      npText.textContent = "spotify: connection timed out — try again later";
+    }
+  }, 10000);
 
   /* --- photo lightbox --- */
   var lb = document.getElementById("lightbox");
