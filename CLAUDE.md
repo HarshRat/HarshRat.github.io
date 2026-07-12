@@ -84,6 +84,18 @@ point-in-polygon, emits compact SVG paths.
 - Contact email: mail@harshrathore.me (Namecheap forwarding). Git identity for
   this repo: `Harsh Rathore <mail@harshrathore.me>`, no AI co-author trailers.
 
+## SEO / discovery
+
+- `robots.txt` (allows all crawlers incl. AI bots), `sitemap.xml` (update
+  `lastmod` on significant content changes), `llms.txt` (AI-crawler summary —
+  keep in sync with site content), JSON-LD `Person` schema in `index.html`.
+- `assets/og-card.png` (1200×630 share card) — regenerate from an SVG mock of
+  the terminal hero if the title/role changes (qlmanage renders SVGs onto a
+  square canvas; crop from top-left with Pillow, sips crop offsets don't work).
+- Google Search Console: domain property `harshrathore.me`, verified via DNS TXT
+  record at Namecheap (`google-site-verification=…` — never delete that record).
+  Sitemap submitted 12 Jul 2026; homepage indexing requested the same day.
+
 ## Local preview
 
 ```
