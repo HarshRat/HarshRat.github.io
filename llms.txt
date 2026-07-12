@@ -1,0 +1,40 @@
+# Harsh Rathore
+
+> Technical Architect at Metafic, based in Bengaluru, India. Designs, architects,
+> and ships high-scale web & mobile products end-to-end with React, React Native,
+> and Node.js, specializing in system design, full-stack backend engineering, and
+> production-grade GenAI integration.
+
+## Professional
+
+- Current role: Technical Architect at Metafic (since Nov 2025; at Metafic since Jan 2021,
+  progressing from React Native Intern → React Native Developer → Mobile Development
+  Lead → Engineering Lead → Technical Architect).
+- Expertise: software architecture, React, React Native, Node.js, TypeScript,
+  system design, CI/CD for mobile, LLM-powered product features.
+
+## Selected projects
+
+- Dallal (dallal.com.kw) — scale-driven real estate platform for the Kuwaiti market;
+  architected the end-to-end system topology.
+- Artrivi (artrivi.com) — end-to-end AI research-paper writing platform; designed the
+  prompt orchestration layer and document assembly pipelines.
+- Fintech wealth platform (private client) — engineered a secure, data-dense frontend
+  for real-time financial data visualization.
+- Caprics Learning Lab (capricslearninglab.com) — e-learning platform; directed the
+  engineering team.
+- SnapBack Returns (iOS, App Store id6479014048) — fullstack engineer.
+
+## Personal
+
+- Traveller and trekker: 6 countries (India, Singapore, Malaysia, Thailand, Indonesia,
+  Vietnam) and 15 Indian states; volcano treks at Mt. Ijen and Mt. Bromo; Beas Kund
+  trek in Himachal (12,772 ft). Home town: Indore, MP.
+- Music lover (live top artists/tracks on the site) and CS2 player.
+
+## Contact
+
+- Website: https://harshrathore.me
+- Email: mail@harshrathore.me
+- GitHub: https://github.com/HarshRat
+- LinkedIn: https://in.linkedin.com/in/harshrat
